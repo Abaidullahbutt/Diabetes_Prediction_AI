@@ -65,18 +65,57 @@ body, html {
 }
 
 /* Inputs */
-input {
+input, select {
     padding: 12px;
     border-radius: 10px;
     border: 1px solid rgba(255, 255, 255, 0.4);
     background: rgba(255, 255, 255, 0.3);
     color: #000;
     font-size: 16px;
+    -webkit-appearance: none; /* remove default arrow on Safari */
+    -moz-appearance: none;
+    appearance: none;
 }
 
 input::placeholder {
     color: #000000aa;
 }
+
+/* Labels for accessibility and clarity */
+label {
+    display: block;
+    text-align: left;
+    font-size: 0.9rem;
+    color: #000000cc;
+    margin-bottom: 6px;
+}
+
+/* Disabled inputs/selects (e.g., Pregnancies when Sex=Male) */
+input:disabled, select:disabled {
+    opacity: 0.7;
+    filter: grayscale(10%);
+    cursor: not-allowed;
+}
+
+/* Result box styling */
+.result-box {
+    margin-top: 20px;
+    font-weight: 600;
+    padding: 14px;
+    border-radius: 10px;
+    font-size: 16px;
+    background: rgba(255,255,255,0.25);
+    color: #000;
+    display: inline-block;
+    text-align: left;
+}
+
+.result-box .meta {
+    margin-top: 8px;
+    font-size: 13px;
+    color: #00000099;
+}
+
 
 /* Button */
 button {
