@@ -66,7 +66,7 @@ body, html {
 
 /* Inputs */
 input, select {
-    padding: 12px;
+    padding: 12px 14px;
     border-radius: 10px;
     border: 1px solid rgba(255, 255, 255, 0.4);
     background: rgba(255, 255, 255, 0.3);
@@ -75,7 +75,18 @@ input, select {
     -webkit-appearance: none; /* remove default arrow on Safari */
     -moz-appearance: none;
     appearance: none;
+    height: 44px;
 }
+
+/* Add custom arrow so selects look like inputs with an arrow on the right */
+select {
+    background-image: linear-gradient(45deg, transparent 50%, #000 50%), linear-gradient(135deg, #000 50%, transparent 50%);
+    background-position: calc(100% - 18px) calc(50% - 6px), calc(100% - 12px) calc(50% - 6px);
+    background-size: 6px 6px, 6px 6px;
+    background-repeat: no-repeat;
+    padding-right: 34px;
+}
+
 
 input::placeholder {
     color: #000000aa;

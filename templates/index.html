@@ -15,8 +15,8 @@
 
             <form action="/predict" method="POST">
                 <div class="form-grid">
-                    <label for="Sex">Sex</label>
                     <select name="Sex" id="Sex" required>
+                        <option value="" disabled selected>Sex</option>
                         <option value="Female">Female</option>
                         <option value="Male">Male</option>
                         <option value="Other">Other</option>
@@ -32,21 +32,21 @@
                     <input type="number" name="Age" placeholder="Age" required>
 
                     <!-- Optional metadata fields (not used by current model but useful for records) -->
-                    <label for="FamilyHistory">Family History of Diabetes</label>
                     <select name="FamilyHistory" id="FamilyHistory">
+                        <option value="" disabled selected>Family History of Diabetes</option>
                         <option value="unknown">Unknown</option>
                         <option value="yes">Yes</option>
                         <option value="no">No</option>
                     </select>
 
-                    <label for="Smoking">Smoking</label>
                     <select name="Smoking" id="Smoking">
+                        <option value="" disabled selected>Smoking</option>
                         <option value="no">No</option>
                         <option value="yes">Yes</option>
                     </select>
 
-                    <label for="ActivityLevel">Activity Level</label>
                     <select name="ActivityLevel" id="ActivityLevel">
+                        <option value="" disabled selected>Activity Level</option>
                         <option value="sedentary">Sedentary</option>
                         <option value="moderate">Moderate</option>
                         <option value="active">Active</option>
