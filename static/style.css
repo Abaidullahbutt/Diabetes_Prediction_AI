@@ -61,7 +61,14 @@ body, html {
 .form-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 15px;
+    gap: 18px 18px;
+    align-items: center; /* keep inputs vertically aligned */
+}
+
+/* Make sure grid children take full width and align consistently */
+.form-grid > * {
+    width: 100%;
+    box-sizing: border-box;
 }
 
 /* Inputs */

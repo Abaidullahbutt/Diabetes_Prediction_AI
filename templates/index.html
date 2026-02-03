@@ -15,36 +15,42 @@
 
             <form action="/predict" method="POST">
                 <div class="form-grid">
+                    <!-- Row 1 -->
                     <select name="Sex" id="Sex" required>
                         <option value="" disabled selected>Sex</option>
                         <option value="Female">Female</option>
                         <option value="Male">Male</option>
                         <option value="Other">Other</option>
                     </select>
-
                     <input type="number" name="Pregnancies" id="Pregnancies" placeholder="Pregnancies" required>
+
+                    <!-- Row 2 -->
                     <input type="number" name="Glucose" placeholder="Glucose" required>
                     <input type="number" name="BloodPressure" placeholder="Blood Pressure" required>
+
+                    <!-- Row 3 -->
                     <input type="number" name="SkinThickness" placeholder="Skin Thickness" required>
                     <input type="number" name="Insulin" placeholder="Insulin" required>
+
+                    <!-- Row 4 -->
                     <input type="number" step="0.1" name="BMI" placeholder="BMI" required>
                     <input type="number" step="0.01" name="DiabetesPedigreeFunction" placeholder="Diabetes Pedigree Function" required>
-                    <input type="number" name="Age" placeholder="Age" required>
 
-                    <!-- Optional metadata fields (not used by current model but useful for records) -->
+                    <!-- Row 5 -->
+                    <input type="number" name="Age" placeholder="Age" required>
                     <select name="FamilyHistory" id="FamilyHistory">
-                        <option value="" disabled selected>Family History of Diabetes</option>
+                        <option value="" disabled selected>Family History</option>
                         <option value="unknown">Unknown</option>
                         <option value="yes">Yes</option>
                         <option value="no">No</option>
                     </select>
 
+                    <!-- Row 6 -->
                     <select name="Smoking" id="Smoking">
                         <option value="" disabled selected>Smoking</option>
                         <option value="no">No</option>
                         <option value="yes">Yes</option>
                     </select>
-
                     <select name="ActivityLevel" id="ActivityLevel">
                         <option value="" disabled selected>Activity Level</option>
                         <option value="sedentary">Sedentary</option>
