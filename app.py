@@ -1,9 +1,10 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for, session
 import pandas as pd
 import joblib
 import os
 
 app = Flask(__name__)
+app.secret_key = "diabetes_secret_key"  # required for session
 
 # -----------------------------
 # Load model once at startup
@@ -19,15 +20,20 @@ except:
 # -----------------------------
 # Routes
 # -----------------------------
+
+# HOME (GET)
 @app.route("/")
 def home():
-    return render_template("index.html")
+    # Clear result on refresh
+    result = session.pop("result", None)
+    return render_template("index.html", result=result)
 
+# PREDICT (POST)
 @app.route("/predict", methods=["POST"])
 def predict():
     try:
-        # Get form data
         data = request.form
+
         patient = pd.DataFrame([{
             "Pregnancies": int(data["Pregnancies"]),
             "Glucose": float(data["Glucose"]),
@@ -39,18 +45,21 @@ def predict():
             "Age": int(data["Age"])
         }])
 
-        # Predict
         prediction = model.predict(patient)[0]
 
-        result = "🟥 Diabetes Detected" if prediction == 1 else "🟩 No Diabetes Detected"
-        return render_template("index.html", result=result)
+        session["result"] = (
+            "🟥 Diabetes Detected" if prediction == 1 else "🟩 No Diabetes Detected"
+        )
+
+        # 🔥 Redirect instead of render
+        return redirect(url_for("home"))
 
     except Exception as e:
-        return render_template("index.html", result=f"Error: {e}")
+        session["result"] = f"Error: {e}"
+        return redirect(url_for("home"))
 
 # -----------------------------
 # Run Flask
 # -----------------------------
 if __name__ == "__main__":
-    # host=0.0.0.0 works on all interfaces
     app.run(debug=True, host="127.0.0.1", port=5000)

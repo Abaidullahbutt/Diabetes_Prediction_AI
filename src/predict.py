@@ -20,9 +20,31 @@ def predict_diabetes():
         "Age": 35
     }])
 
-    prediction = model.predict(new_patient)
+    # Try to load threshold metadata if available
+    meta_path = os.path.join(BASE_DIR, "diabetes_model_meta.json")
+    if os.path.exists(meta_path):
+        try:
+            meta = joblib.load(meta_path) if meta_path.endswith('.pkl') else None
+        except Exception:
+            meta = None
+        if meta is None:
+            try:
+                import json
+                with open(meta_path, 'r') as f:
+                    meta = json.load(f)
+            except Exception:
+                meta = None
+    else:
+        meta = None
 
-    if prediction[0] == 1:
+    # If threshold exists and model provides predict_proba, use it
+    if meta and 'threshold' in meta and hasattr(model, 'predict_proba'):
+        proba = model.predict_proba(new_patient)[:, 1]
+        pred = (proba >= float(meta['threshold'])).astype(int)
+    else:
+        pred = model.predict(new_patient)
+
+    if int(pred[0]) == 1:
         print("🟥 Diabetes Detected")
     else:
         print("🟩 No Diabetes Detected")
