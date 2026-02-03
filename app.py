@@ -34,24 +34,50 @@ def predict():
     try:
         data = request.form
 
+        # Read sex & optional metadata (these optional fields are not used by the current model)
+        sex = data.get("Sex", "Female")
+        family_history = data.get("FamilyHistory", "unknown")
+        smoking = data.get("Smoking", "no")
+        activity = data.get("ActivityLevel", "moderate")
+
+        # Pregnancies: if mobile/men, ensure value is 0 to avoid confusion
+        try:
+            if sex == "Male":
+                pregnancies = 0
+            else:
+                pregnancies = int(data.get("Pregnancies", 0))
+        except ValueError:
+            pregnancies = 0
+
+        # Build dataframe with features the model expects (order doesn't matter for pandas columns but must match training features)
         patient = pd.DataFrame([{
-            "Pregnancies": int(data["Pregnancies"]),
-            "Glucose": float(data["Glucose"]),
-            "BloodPressure": float(data["BloodPressure"]),
-            "SkinThickness": float(data["SkinThickness"]),
-            "Insulin": float(data["Insulin"]),
-            "BMI": float(data["BMI"]),
-            "DiabetesPedigreeFunction": float(data["DiabetesPedigreeFunction"]),
-            "Age": int(data["Age"])
+            "Pregnancies": pregnancies,
+            "Glucose": float(data.get("Glucose", 0.0)),
+            "BloodPressure": float(data.get("BloodPressure", 0.0)),
+            "SkinThickness": float(data.get("SkinThickness", 0.0)),
+            "Insulin": float(data.get("Insulin", 0.0)),
+            "BMI": float(data.get("BMI", 0.0)),
+            "DiabetesPedigreeFunction": float(data.get("DiabetesPedigreeFunction", 0.0)),
+            "Age": int(data.get("Age", 0))
         }])
 
         prediction = model.predict(patient)[0]
 
-        session["result"] = (
-            "🟥 Diabetes Detected" if prediction == 1 else "🟩 No Diabetes Detected"
-        )
+        # Make result message slightly more informative
+        if prediction == 1:
+            session["result"] = "🟥 Diabetes Detected"
+        else:
+            session["result"] = "🟩 No Diabetes Detected"
 
-        # 🔥 Redirect instead of render
+        # Optionally store submitted metadata in session for display (not persisted)
+        session["last_input"] = {
+            "Sex": sex,
+            "Pregnancies": int(pregnancies),
+            "FamilyHistory": family_history,
+            "Smoking": smoking,
+            "ActivityLevel": activity
+        }
+
         return redirect(url_for("home"))
 
     except Exception as e:

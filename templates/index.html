@@ -15,7 +15,14 @@
 
             <form action="/predict" method="POST">
                 <div class="form-grid">
-                    <input type="number" name="Pregnancies" placeholder="Pregnancies" required>
+                    <label for="Sex">Sex</label>
+                    <select name="Sex" id="Sex" required>
+                        <option value="Female">Female</option>
+                        <option value="Male">Male</option>
+                        <option value="Other">Other</option>
+                    </select>
+
+                    <input type="number" name="Pregnancies" id="Pregnancies" placeholder="Pregnancies" required>
                     <input type="number" name="Glucose" placeholder="Glucose" required>
                     <input type="number" name="BloodPressure" placeholder="Blood Pressure" required>
                     <input type="number" name="SkinThickness" placeholder="Skin Thickness" required>
@@ -23,13 +30,54 @@
                     <input type="number" step="0.1" name="BMI" placeholder="BMI" required>
                     <input type="number" step="0.01" name="DiabetesPedigreeFunction" placeholder="Diabetes Pedigree Function" required>
                     <input type="number" name="Age" placeholder="Age" required>
+
+                    <!-- Optional metadata fields (not used by current model but useful for records) -->
+                    <label for="FamilyHistory">Family History of Diabetes</label>
+                    <select name="FamilyHistory" id="FamilyHistory">
+                        <option value="unknown">Unknown</option>
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                    </select>
+
+                    <label for="Smoking">Smoking</label>
+                    <select name="Smoking" id="Smoking">
+                        <option value="no">No</option>
+                        <option value="yes">Yes</option>
+                    </select>
+
+                    <label for="ActivityLevel">Activity Level</label>
+                    <select name="ActivityLevel" id="ActivityLevel">
+                        <option value="sedentary">Sedentary</option>
+                        <option value="moderate">Moderate</option>
+                        <option value="active">Active</option>
+                    </select>
                 </div>
                 <button type="submit">Predict</button>
             </form>
 
+            <script>
+                // Auto-set pregnancies to 0 for Male and disable input to avoid confusion
+                const sexEl = document.getElementById('Sex');
+                const pregEl = document.getElementById('Pregnancies');
+                function updatePreg() {
+                    if (sexEl.value === 'Male') {
+                        pregEl.value = 0;
+                        pregEl.disabled = true;
+                    } else {
+                        pregEl.disabled = false;
+                    }
+                }
+                sexEl.addEventListener('change', updatePreg);
+                // Initialize on page load
+                updatePreg();
+            </script>
+
             {% if result %}
 <div class="result-box">
     {{ result }}
+    {% if session.last_input %}
+    <div class="meta">Last input: Sex={{ session.last_input.Sex }}, Pregnancies={{ session.last_input.Pregnancies }}, FamilyHistory={{ session.last_input.FamilyHistory }}, Smoking={{ session.last_input.Smoking }}, Activity={{ session.last_input.ActivityLevel }}</div>
+    {% endif %}
 </div>
 {% endif %}
         </div>
